@@ -13,7 +13,7 @@ public final class FloatValidate extends NumberValidator<Float> {
     }
 
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (min != null) {
             int result = value.compareTo(min);
             isTrue(result == 1 || result == 0);

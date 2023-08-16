@@ -15,7 +15,7 @@ public final class StringValidate extends SequenceValidator<String> {
     }
 
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (minLength != null) {
             isTrue(value.length() >= minLength);
         }

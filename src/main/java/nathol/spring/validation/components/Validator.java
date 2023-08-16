@@ -81,7 +81,7 @@ public class Validator<T> {
      * 占位, 为继承此类需实现的方法 <br/>
      * 此类秉持着约定大于配置
      */
-    public void validate0() {
+    protected void validate0() {
     }
 
     /**

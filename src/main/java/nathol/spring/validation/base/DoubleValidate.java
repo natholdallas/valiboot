@@ -15,7 +15,7 @@ public final class DoubleValidate extends NumberValidator<Double> {
     }
 
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (min != null) {
             int result = value.compareTo(min);
             isTrue(result == 1 || result == 0);

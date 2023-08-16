@@ -13,7 +13,7 @@ public final class LongValidate extends NumberValidator<Long> {
     }
 
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (min != null) {
             isTrue(value >= min);
         }
