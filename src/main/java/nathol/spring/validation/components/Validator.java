@@ -69,10 +69,11 @@ public class Validator<T> {
      * 开始校验, 请不要继承此类
      */
     public final void validate() {
-        isTrue(!this.nullable || this.value != null);
         if (this.value == null) {
+            isTrue(nullable);
             return;
         }
+        isTrue(this.value != null);
         validate0();
         this.wrappers.forEach(it -> isTrue(it.test(value)));
     }
