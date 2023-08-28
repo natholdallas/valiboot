@@ -1,6 +1,6 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
-import nathol.spring.validation.components.NumberValidator;
+import nathol.spring.validation.NumberValidator;
 
 public final class LongValidate extends NumberValidator<Long> {
 
@@ -23,6 +23,15 @@ public final class LongValidate extends NumberValidator<Long> {
         for (Long forbid : forbids) {
             isFalse(value == forbid);
         }
+        boolean haveEnumration = true;
+        for (Long enumration : enumrations) {
+            if (value.compareTo(enumration) == 0) {
+                haveEnumration = true;
+                break;
+            }
+            haveEnumration = false;
+        }
+        isTrue(haveEnumration);
     }
 
 }

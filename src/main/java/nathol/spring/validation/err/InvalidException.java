@@ -1,4 +1,4 @@
-package nathol.spring.validation.exception;
+package nathol.spring.validation.err;
 
 /**
  * 非常简单的异常类, 你可以在这个类中抛出信息, 推荐使用 Spring 的全局异常捕获器

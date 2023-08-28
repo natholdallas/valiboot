@@ -1,13 +1,10 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
 import java.util.Collection;
 import java.util.Optional;
 
-import nathol.spring.validation.components.CollectionValidator;
+import nathol.spring.validation.CollectionValidator;
 
-/**
- * CollectionValidator 的实现
- */
 public final class CollectionValidate<T extends Collection<E>, E> extends CollectionValidator<T, E> {
 
     public CollectionValidate(T value) {
@@ -19,7 +16,7 @@ public final class CollectionValidate<T extends Collection<E>, E> extends Collec
     }
 
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (minSize != null) {
             isTrue(value.size() >= minSize);
         }

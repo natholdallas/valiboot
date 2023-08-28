@@ -1,15 +1,14 @@
-package nathol.spring.validation.components;
+package nathol.spring.validation;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Predicate;
 
-import nathol.spring.validation.base.DoubleValidate;
-import nathol.spring.validation.base.FloatValidate;
-import nathol.spring.validation.base.IntegerValidate;
-import nathol.spring.validation.base.LongValidate;
-import nathol.spring.validation.exception.InvalidException;
+import nathol.spring.validation.components.DoubleValidate;
+import nathol.spring.validation.components.FloatValidate;
+import nathol.spring.validation.components.IntegerValidate;
+import nathol.spring.validation.components.LongValidate;
+import nathol.spring.validation.err.InvalidException;
 
 /**
  * 数值的校验抽象思路
@@ -18,7 +17,8 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
 
     protected T min;
     protected T max;
-    protected final Set<T> forbids = new HashSet<>();
+    protected final Collection<T> forbids = new ArrayList<>();
+    protected final Collection<T> enumrations = new ArrayList<>();
 
     /**
      * 传入参数, 参数类型必须为 Number 的子类
@@ -98,8 +98,8 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
      * 禁止 value 等于 ....值
      * @param values 禁止的数值
      */
-    @SuppressWarnings("unchecked")
-    public NumberValidator<T> forbid(T... values) {
+    @SafeVarargs
+    public final NumberValidator<T> forbid(T... values) {
         for (T value : values) {
             this.forbids.add(value);
         }
@@ -112,6 +112,27 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
      */
     public NumberValidator<T> forbid(Collection<T> values) {
         this.forbids.addAll(values);
+        return this;
+    }
+
+    /**
+     * 使 value 符合 enumration 中的其中一个值, 如果都没有则抛出异常
+     * @param values 符合的数值
+     */
+    @SafeVarargs
+    public final NumberValidator<T> enumration(T...  values) {
+        for (T value : values) {
+            this.enumrations.add(value);
+        }
+        return this;
+    }
+
+    /**
+     * 使 value 符合 enumration 中的其中一个值, 如果都没有则抛出异常
+     * @param values 符合的数值
+     */
+    public final NumberValidator<T> enumration(Collection<T> values) {
+        this.enumrations.addAll(values);
         return this;
     }
 

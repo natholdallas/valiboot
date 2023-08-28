@@ -1,6 +1,6 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
-import nathol.spring.validation.components.NumberValidator;
+import nathol.spring.validation.NumberValidator;
 
 public final class FloatValidate extends NumberValidator<Float> {
 
@@ -25,6 +25,15 @@ public final class FloatValidate extends NumberValidator<Float> {
         for (Float forbid : forbids) {
             isFalse(value.compareTo(forbid) == 0);
         }
+        boolean haveEnumration = true;
+        for (Float enumration : enumrations) {
+            if (value.compareTo(enumration) == 0) {
+                haveEnumration = true;
+                break;
+            }
+            haveEnumration = false;
+        }
+        isTrue(haveEnumration);
     }
 
 }

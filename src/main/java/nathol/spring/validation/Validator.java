@@ -1,12 +1,11 @@
-package nathol.spring.validation.components;
+package nathol.spring.validation;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import nathol.spring.validation.Validate;
-import nathol.spring.validation.exception.InvalidException;
+import nathol.spring.validation.err.InvalidException;
 
 /**
  * 所有验证器的父类 <br/>
@@ -19,7 +18,7 @@ public class Validator<T> {
     protected final T value;
     protected final Collection<Predicate<? super T>> wrappers = new ArrayList<>();
     protected boolean nullable = false;
-    protected InvalidException exception = null;
+    protected InvalidException exception = new InvalidException("Invalid Param.");
 
     /**
      * 传入的参数,任意一个,你可以通过继承此类 <br/>
@@ -111,9 +110,6 @@ public class Validator<T> {
         if (expression) {
             return;
         }
-        if (this.exception == null) {
-            throw new InvalidException("Invalid Param.");
-        }
         throw this.exception;
     }
 
@@ -125,9 +121,6 @@ public class Validator<T> {
         if (!expression) {
             return;
         }
-        if (this.exception == null) {
-            throw new InvalidException("Invalid Param.");
-        }
         throw this.exception;
     }
 
@@ -138,9 +131,6 @@ public class Validator<T> {
     public void isNull(Object object) {
         if (object != null) {
             return;
-        }
-        if (this.exception == null) {
-            throw new InvalidException("Invalid Param.");
         }
         throw this.exception;
     }

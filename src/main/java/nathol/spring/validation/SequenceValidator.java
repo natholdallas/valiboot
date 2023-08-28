@@ -1,9 +1,11 @@
-package nathol.spring.validation.components;
+package nathol.spring.validation;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Predicate;
 
-import nathol.spring.validation.base.StringValidate;
-import nathol.spring.validation.exception.InvalidException;
+import nathol.spring.validation.components.StringValidate;
+import nathol.spring.validation.err.InvalidException;
 
 /**
  * 字符串的校验抽象思路
@@ -15,6 +17,7 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
     protected boolean notBlank = false;
     protected boolean notEmpty = false;
     protected String regex;
+    protected final Collection<T> enumrations = new ArrayList<>();
 
     /**
      * 传入参数, 参数类型必须为 CharSequence 的子类
@@ -111,6 +114,27 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
      */
     public SequenceValidator<T> regex(String regex) {
         this.regex = regex;
+        return this;
+    }
+
+    /**
+     * 使 value 符合 enumration 中的其中一个值, 如果都没有则抛出异常
+     * @param values 符合的数值
+     */
+    @SafeVarargs
+    public final SequenceValidator<T> enumration(T...  values) {
+        for (T value : values) {
+            this.enumrations.add(value);
+        }
+        return this;
+    }
+
+    /**
+     * 使 value 符合 enumration 中的其中一个值, 如果都没有则抛出异常
+     * @param values 符合的数值
+     */
+    public final SequenceValidator<T> enumration(Collection<T> values) {
+        this.enumrations.addAll(values);
         return this;
     }
 

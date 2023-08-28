@@ -1,8 +1,8 @@
-package nathol.spring.validation.components;
+package nathol.spring.validation;
 
 import java.util.function.Predicate;
 
-import nathol.spring.validation.exception.InvalidException;
+import nathol.spring.validation.err.InvalidException;
 
 /**
  * 由于 Boolean 为 final class, 因此无需有多种实现
@@ -76,7 +76,7 @@ public final class BooleanValidator extends Validator<Boolean> {
      * 校验实现
      */
     @Override
-    public void validate0() {
+    protected void validate0() {
         if (isTrue) {
             isTrue(this.value);
         }

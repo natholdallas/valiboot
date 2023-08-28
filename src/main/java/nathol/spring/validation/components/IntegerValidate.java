@@ -1,8 +1,8 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
 import java.util.Optional;
 
-import nathol.spring.validation.components.NumberValidator;
+import nathol.spring.validation.NumberValidator;
 
 public final class IntegerValidate extends NumberValidator<Integer> {
 
@@ -25,6 +25,15 @@ public final class IntegerValidate extends NumberValidator<Integer> {
         for (Integer forbid : forbids) {
             isFalse(value == forbid);
         }
+        boolean haveEnumration = true;
+        for (Integer enumration : enumrations) {
+            if (value.compareTo(enumration) == 0) {
+                haveEnumration = true;
+                break;
+            }
+            haveEnumration = false;
+        }
+        isTrue(haveEnumration);
     }
 
 }

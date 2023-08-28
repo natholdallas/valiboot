@@ -1,8 +1,8 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
 import java.util.regex.Pattern;
 
-import nathol.spring.validation.components.SequenceValidator;
+import nathol.spring.validation.SequenceValidator;
 
 public final class StringValidate extends SequenceValidator<String> {
 
@@ -34,6 +34,15 @@ public final class StringValidate extends SequenceValidator<String> {
                     .matches();
             isTrue(expression);
         }
+        boolean haveEnumration = true;
+        for (String enumration : enumrations) {
+            if (value.equals(enumration)) {
+                haveEnumration = true;
+                break;
+            }
+            haveEnumration = false;
+        }
+        isTrue(haveEnumration);
     }
 
 }

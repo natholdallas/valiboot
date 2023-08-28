@@ -1,11 +1,11 @@
-package nathol.spring.validation.components;
+package nathol.spring.validation;
 
 import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import nathol.spring.validation.base.CollectionValidate;
-import nathol.spring.validation.exception.InvalidException;
+import nathol.spring.validation.components.CollectionValidate;
+import nathol.spring.validation.err.InvalidException;
 
 /**
  * 集合的校验抽象思路

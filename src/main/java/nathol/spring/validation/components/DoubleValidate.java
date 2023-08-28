@@ -1,8 +1,8 @@
-package nathol.spring.validation.base;
+package nathol.spring.validation.components;
 
 import java.util.Optional;
 
-import nathol.spring.validation.components.NumberValidator;
+import nathol.spring.validation.NumberValidator;
 
 public final class DoubleValidate extends NumberValidator<Double> {
 
@@ -27,6 +27,15 @@ public final class DoubleValidate extends NumberValidator<Double> {
         for (Double forbid : forbids) {
             isFalse(value.compareTo(forbid) == 0);
         }
+        boolean haveEnumration = true;
+        for (Double enumration : enumrations) {
+            if (value.compareTo(enumration) == 0) {
+                haveEnumration = true;
+                break;
+            }
+            haveEnumration = false;
+        }
+        isTrue(haveEnumration);
     }
 
 }
