@@ -14,13 +14,20 @@
 ## 安装
 
 ```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    <repository>
+</repositories>
+
 <dependency>
-    <groupId>nathol.spring.validation</groupId>
-    <artifactId>valiboot</artifactId>
-    <version>....</version>
+    <groupId>com.github.NatholDallas</groupId>
+    <artifactId>ValiBoot</artifactId>
+    <version>2.0.0</version>
 </dependency>
 
-<!-- 这个 version 标签中的 .... 不代表版本号, 详细你应该查看以往的版本发布号 -->
+<!-- 这个 version 标签中的版本号永远代表着最新版本号, 详细你应该查看以往的版本发布号 -->
 ```
 
 ## ValiBoot - DTO/Controller
