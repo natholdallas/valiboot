@@ -54,18 +54,18 @@ public class UserController {
     }
 
     @PutMapping
-    public String put(UserPutRequest request) {
+    public String put(@RequestBody UserPutRequest request) {
         if (this.userMapper.selectById(request.getId())) {
             return "error, user not found";
         }
-        // request.getUsername() 校验字符长度....之类的
-        // request.getPassword() 校验字符合法....(正则表达式什么的)
+        // request.getUsername() 校验字符长度....
+        // request.getPassword() 校验字符合法....
         return this.userService.putService(request);
     }
 
 }
 
-// DTO (映射到 UserController 中的 PutMapping(put方法))
+// DTO (映射到 UserController 中的 put 方法)
 public class UserPutRequest {
 
     private final Integer id;
@@ -82,7 +82,7 @@ public class UserPutRequest {
 
 }
 
-// Service
+// Service 层
 @Service
 public class UserService {
 
@@ -92,7 +92,7 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public String putService(UserPutRequest request) {
+    public String updateUser(UserPutRequest request) {
         // UserMapper update...
         return "successful";
     }
@@ -131,7 +131,8 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    public String put(UserPutRequest request) {
+    @PutMapping
+    public String put(@RequestBody UserPutRequest request) {
         // UserMapper update...
         return "successful";
     }
@@ -154,19 +155,19 @@ public class UserPutRequest {
     private final String password;
 
     public UserPutRequest(Integer id, String username, String password) {
-        // 通过 SpringApplication 返回的 context (详情见 ConfigurableApplicationContext 对象) 拿到 UserMapper 的实例
-        Spt
-        this.id = Validate.of(id)
+        // 通过 SpringApplication 返回的 context (详情见 ConfigurableApplicationContext 对象)
+        // 拿到 UserMapper 的实例
+        this.id = NumberValidator.of(id)
                 .wrapper(value -> {
                     UserMapper userMapper = Application.context.getBean("userMapper", UserMapper.class);
                     return userMapper.isExists(value);
                 });
-        this.username = Validate.of(username)
+        this.username = SequenceValidator.of(username)
                 .range(6, 12)
                 .regex("正则超人!(我不会🤣)")
                 .notEmpty()
                 .notBlank();
-        this.password = Validate.of(password)
+        this.password = SequenceValidator.of(password)
                 .regex("正则表达式...(我不会🤣)")
                 .notEmpty()
                 .notBlank();
@@ -176,6 +177,40 @@ public class UserPutRequest {
 
 }
 ```
+
+## 核心内容
+
+所有的使用层位于 `nathol.spring.validation` 包下
+
+- BooleanValidator: 用于校验布尔值
+- CollectionValidator: 用于校验集合
+- NumberValidator: 用于校验数值
+- SequenceValidator: 用于校验字符
+- Validator: 以上的父类,比较少用
+
+## 实现具体
+
+所有的具体实现位于 `nathol.spring.validation.components` 包下
+
+### CollectionValidator 的实现
+
+1. CollectionValidate
+
+### NumberValidator 的实现
+
+1. DoubleValidate
+2. FloatValidate
+3. IntegerValidate
+4. LongValidate'
+
+### SequenceValidator 的实现
+
+1. StringValidate
+
+## 技术栈
+
+本校验框架都为链式调用, 采用 `Lazy Load` (惰性加载) 模式  
+因此可以乱序调用
 
 ## 后续内容
 

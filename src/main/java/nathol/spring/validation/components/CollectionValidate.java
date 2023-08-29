@@ -23,6 +23,12 @@ public final class CollectionValidate<T extends Collection<E>, E> extends Collec
         if (maxSize != null) {
             isTrue(value.size() <= maxSize);
         }
+        if (contains != null) {
+            isTrue(value.contains(contains));
+        }
+        if (notEmpty) {
+            isTrue(!value.isEmpty());
+        }
     }
 
 }

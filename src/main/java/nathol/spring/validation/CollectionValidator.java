@@ -14,6 +14,8 @@ public abstract class CollectionValidator<T extends Collection<E>, E> extends Va
 
     protected Integer minSize;
     protected Integer maxSize;
+    protected boolean notEmpty;
+    protected Object contains;
 
     /**
      * 传入参数, 参数类型必须为 Collection 的子类
@@ -56,6 +58,22 @@ public abstract class CollectionValidator<T extends Collection<E>, E> extends Va
      */
     public CollectionValidator<T, E> except(InvalidException exception) {
         super.except(exception);
+        return this;
+    }
+
+    /**
+     * 校验 value 的元素长度是否为空
+     */
+    public CollectionValidator<T, E> notEmpty() {
+        this.notEmpty = true;
+        return this;
+    }
+
+    /**
+     * 校验 value 的元素是否包含此传入的值
+     */
+    public CollectionValidator<T, E> contains(Object value) {
+        this.contains = value;
         return this;
     }
 

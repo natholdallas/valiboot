@@ -1,9 +1,11 @@
 package nathol.spring.validation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import nathol.spring.validation.components.BigDecimalValidate;
 import nathol.spring.validation.components.DoubleValidate;
 import nathol.spring.validation.components.FloatValidate;
 import nathol.spring.validation.components.IntegerValidate;
@@ -166,6 +168,14 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
 
     public static NumberValidator<Double> of(Double value, Double defaultValue) {
         return new DoubleValidate(value, defaultValue);
+    }
+
+    public static NumberValidator<BigDecimal> of(BigDecimal value) {
+        return new BigDecimalValidate(value);
+    }
+
+    public static NumberValidator<BigDecimal> of(BigDecimal value, BigDecimal defaultValue) {
+        return new BigDecimalValidate(value, defaultValue);
     }
 
 }
