@@ -18,16 +18,16 @@ public final class CollectionValidate<T extends Collection<E>, E> extends Collec
     @Override
     protected void validate0() {
         if (minSize != null) {
-            isTrue(value.size() >= minSize);
+            isTrue(value.size() >= minSize, "Value can not be less than min.");
         }
         if (maxSize != null) {
-            isTrue(value.size() <= maxSize);
+            isTrue(value.size() <= maxSize, "Value can not be greater than max.");
         }
         if (contains != null) {
-            isTrue(value.contains(contains));
+            isTrue(value.contains(contains), "The contains value is not in value (Collection)");
         }
         if (notEmpty) {
-            isTrue(!value.isEmpty());
+            isTrue(!value.isEmpty(), "Value can not be empty.");
         }
     }
 

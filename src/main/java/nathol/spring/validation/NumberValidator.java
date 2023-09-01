@@ -133,7 +133,7 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
      * 使 value 符合 enumration 中的其中一个值, 如果都没有则抛出异常
      * @param values 符合的数值
      */
-    public final NumberValidator<T> enumration(Collection<T> values) {
+    public NumberValidator<T> enumration(Collection<T> values) {
         this.enumrations.addAll(values);
         return this;
     }

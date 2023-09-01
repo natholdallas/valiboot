@@ -17,22 +17,22 @@ public final class StringValidate extends SequenceValidator<String> {
     @Override
     protected void validate0() {
         if (minLength != null) {
-            isTrue(value.length() >= minLength);
+            isTrue(value.length() >= minLength, "Value can not be less than minLength.");
         }
         if (maxLength != null) {
-            isTrue(value.length() <= maxLength);
+            isTrue(value.length() <= maxLength, "Value can not be greater than maxLength.");
         }
         if (notEmpty) {
-            isTrue(!value.isEmpty());
+            isTrue(!value.isEmpty(), "Value can not be empty.");
         }
         if (notBlank) {
-            isTrue(!value.isBlank());
+            isTrue(!value.isBlank(), "Value can not be blank.");
         }
         if (regex != null) {
             boolean expression = Pattern.compile(regex)
                     .matcher(value)
                     .matches();
-            isTrue(expression);
+            isTrue(expression, "Value does not match regex.");
         }
         boolean haveEnumration = true;
         for (String enumration : enumrations) {
@@ -42,7 +42,7 @@ public final class StringValidate extends SequenceValidator<String> {
             }
             haveEnumration = false;
         }
-        isTrue(haveEnumration);
+        isTrue(haveEnumration, "Value must be in one of the enumration.");
     }
 
 }

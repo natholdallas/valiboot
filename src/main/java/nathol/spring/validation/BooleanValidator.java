@@ -59,7 +59,7 @@ public final class BooleanValidator extends Validator<Boolean> {
     /**
      * 校验 value 是否为 True, 如果不是, 则抛出 {@link InvalidException}
      */
-    public BooleanValidator isTrue() {
+    public BooleanValidator beTrue() {
         this.isTrue = true;
         return this;
     }
@@ -67,7 +67,7 @@ public final class BooleanValidator extends Validator<Boolean> {
     /**
      * 校验 value 是否为 False, 如果不是, 则抛出 {@link InvalidException}
      */
-    public BooleanValidator isFalse() {
+    public BooleanValidator beFalse() {
         this.isFalse = true;
         return this;
     }
@@ -78,10 +78,10 @@ public final class BooleanValidator extends Validator<Boolean> {
     @Override
     protected void validate0() {
         if (isTrue) {
-            isTrue(this.value);
+            isTrue(this.value, "Value must be true.");
         }
         if (isFalse) {
-            isFalse(this.value);
+            isFalse(this.value, "Value must be false.");
         }
     }
 

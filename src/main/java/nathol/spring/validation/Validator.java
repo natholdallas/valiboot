@@ -16,8 +16,12 @@ import nathol.spring.validation.err.InvalidException;
 public class Validator<T> {
 
     protected final T value;
+
     protected final Collection<Predicate<? super T>> wrappers = new ArrayList<>();
+
     protected boolean nullable = false;
+
+    @Deprecated
     protected InvalidException exception = new InvalidException("Invalid Param.");
 
     /**
@@ -69,12 +73,11 @@ public class Validator<T> {
      */
     public final void validate() {
         if (this.value == null) {
-            isTrue(nullable);
+            isTrue(nullable, "Value can not be null.");
             return;
         }
-        isTrue(this.value != null);
         validate0();
-        this.wrappers.forEach(it -> isTrue(it.test(value)));
+        this.wrappers.forEach(it -> isTrue(it.test(value), "Wrappers failed."));
     }
 
     /**
@@ -103,39 +106,6 @@ public class Validator<T> {
     }
 
     /**
-     * 校验传入的布尔值是否为 True, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     */
-    public void isTrue(boolean expression) {
-        if (expression) {
-            return;
-        }
-        throw this.exception;
-    }
-
-    /**
-     * 校验传入的布尔值是否为 False, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     */
-    public void isFalse(boolean expression) {
-        if (!expression) {
-            return;
-        }
-        throw this.exception;
-    }
-
-    /**
-     * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
-     * @param object 参数
-     */
-    public void isNull(Object object) {
-        if (object != null) {
-            return;
-        }
-        throw this.exception;
-    }
-
-    /**
      * 快捷实例化方法
      * @param <T> 记录传入的参数类型
      * @param value 值
@@ -152,6 +122,66 @@ public class Validator<T> {
      */
     public static <T> Validator<T> of(T value, T defaultValue) {
         return new Validator<>(value, defaultValue);
+    }
+
+    /**
+     * 校验传入的布尔值是否为 True, 如果不是, 则抛出 {@link InvalidException}
+     * @param expression 布尔值
+     */
+    public static void isTrue(boolean expression) {
+        isTrue(expression, "Invalid Param");
+    }
+
+    /**
+     * 校验传入的布尔值是否为 True, 如果不是, 则抛出 {@link InvalidException}
+     * @param expression 布尔值
+     * @param message 异常信息
+     */
+    public static void isTrue(boolean expression, String message) {
+        if (expression) {
+            return;
+        }
+        throw new InvalidException(message);
+    }
+
+    /**
+     * 校验传入的布尔值是否为 False, 如果不是, 则抛出 {@link InvalidException}
+     * @param expression 布尔值
+     */
+    public static void isFalse(boolean expression) {
+        isFalse(expression, "Invalid Param");
+    }
+
+    /**
+     * 校验传入的布尔值是否为 False, 如果不是, 则抛出 {@link InvalidException}
+     * @param expression 布尔值
+     * @param message 异常信息
+     */
+    public static void isFalse(boolean expression, String message) {
+        if (!expression) {
+            return;
+        }
+        throw new InvalidException(message);
+    }
+
+    /**
+     * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
+     * @param object 参数
+     */
+    public static void isNull(Object object) {
+        isNull(object, "Invalid Param");
+    }
+
+    /**
+     * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
+     * @param object 参数
+     * @param message 异常信息
+     */
+    public static void isNull(Object object, String message) {
+        if (object != null) {
+            return;
+        }
+        throw new InvalidException(message);
     }
 
 }

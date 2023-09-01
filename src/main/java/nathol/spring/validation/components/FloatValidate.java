@@ -16,14 +16,14 @@ public final class FloatValidate extends NumberValidator<Float> {
     protected void validate0() {
         if (min != null) {
             int result = value.compareTo(min);
-            isTrue(result == 1 || result == 0);
+            isTrue(result == 1 || result == 0, "Value can not be less than min.");
         }
         if (max != null) {
             int result = value.compareTo(max);
-            isTrue(result == -1 || result == 0);
+            isTrue(result == -1 || result == 0, "Value can not be greater than max.");
         }
         for (Float forbid : forbids) {
-            isFalse(value.compareTo(forbid) == 0);
+            isFalse(value.compareTo(forbid) == 0, "Value can not be equal to forbid.");
         }
         boolean haveEnumration = true;
         for (Float enumration : enumrations) {
@@ -33,7 +33,7 @@ public final class FloatValidate extends NumberValidator<Float> {
             }
             haveEnumration = false;
         }
-        isTrue(haveEnumration);
+        isTrue(haveEnumration, "Value must be in one of the enumration.");
     }
 
 }
