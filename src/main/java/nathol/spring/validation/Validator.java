@@ -168,8 +168,8 @@ public class Validator<T> {
      * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
      * @param object 参数
      */
-    public static void isNull(Object object) {
-        isNull(object, "Invalid Param");
+    public static void notNull(Object object) {
+        notNull(object, "Invalid Param");
     }
 
     /**
@@ -177,7 +177,7 @@ public class Validator<T> {
      * @param object 参数
      * @param message 异常信息
      */
-    public static void isNull(Object object, String message) {
+    public static void notNull(Object object, String message) {
         if (object != null) {
             return;
         }
