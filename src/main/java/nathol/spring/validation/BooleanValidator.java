@@ -21,8 +21,8 @@ public final class BooleanValidator extends Validator<Boolean> {
     }
 
     @Override
-    public BooleanValidator required() {
-        super.required();
+    public BooleanValidator required(boolean value) {
+        super.required(value);
         return this;
     }
 

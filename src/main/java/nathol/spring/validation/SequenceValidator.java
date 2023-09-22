@@ -106,8 +106,8 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
     }
 
     @Override
-    public SequenceValidator<T> required() {
-        super.required();
+    public SequenceValidator<T> required(boolean value) {
+        super.required(value);
         return this;
     }
 

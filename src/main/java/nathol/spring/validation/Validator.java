@@ -15,7 +15,7 @@ public class Validator<T> {
 
     protected final Collection<Predicate<? super T>> wrappers = new ArrayList<>();
 
-    protected boolean require = false;
+    protected boolean require = true;
 
     /**
      * 传入的参数,任意一个,你可以通过继承此类 <br/>
@@ -50,8 +50,8 @@ public class Validator<T> {
     /**
      * 设置 value 可以为 null
      */
-    public Validator<T> required() {
-        require = true;
+    public Validator<T> required(boolean value) {
+        this.require = value;
         return this;
     }
 

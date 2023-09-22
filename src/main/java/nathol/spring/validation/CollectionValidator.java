@@ -81,8 +81,8 @@ public abstract class CollectionValidator<T extends Collection<E>, E> extends Va
     }
 
     @Override
-    public CollectionValidator<T, E> required() {
-        super.required();
+    public CollectionValidator<T, E> required(boolean value) {
+        super.required(value);
         return this;
     }
 

@@ -93,8 +93,8 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
     }
 
     @Override
-    public NumberValidator<T> required() {
-        super.required();
+    public NumberValidator<T> required(boolean value) {
+        super.required(value);
         return this;
     }
 
