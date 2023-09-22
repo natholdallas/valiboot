@@ -14,24 +14,26 @@ public final class LongValidate extends NumberValidator<Long> {
 
     @Override
     protected void validate0() {
-        if (min != null) {
+        if (min != null)
             isTrue(value >= min, "Value can not be less than min.");
-        }
-        if (max != null) {
+        if (max != null)
             isTrue(value <= max, "Value can not be greater than max.");
+        boolean notIn = false;
+        for (Long it : notInValues) {
+            if (!value.equals(it))
+                continue;
+            notIn = true;
+            break;
         }
-        for (Long forbid : forbids) {
-            isFalse(value == forbid, "Value can not be equal to forbid.");
+        isFalse(notIn, "Value can not in " + notInValues + " .");
+        boolean hasValue = false;
+        for (Long it : hasValues) {
+            if (!value.equals(it))
+                continue;
+            hasValue = true;
+            break;
         }
-        boolean haveEnumration = true;
-        for (Long enumration : enumrations) {
-            if (value == enumration) {
-                haveEnumration = true;
-                break;
-            }
-            haveEnumration = false;
-        }
-        isTrue(haveEnumration, "Value must be in one of the enumration.");
+        isTrue(hasValue, "Value must be in" + hasValues + " .");
     }
 
 }

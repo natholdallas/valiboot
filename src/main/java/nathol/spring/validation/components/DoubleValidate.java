@@ -24,18 +24,22 @@ public final class DoubleValidate extends NumberValidator<Double> {
             int result = value.compareTo(max);
             isTrue(result == -1 || result == 0, "Value can not be greater than max.");
         }
-        for (Double forbid : forbids) {
-            isFalse(value.compareTo(forbid) == 0, "Value can not be equal to forbid.");
+        boolean notIn = false;
+        for (Double it : notInValues) {
+            if (!value.equals(it))
+                continue;
+            notIn = true;
+            break;
         }
-        boolean haveEnumration = true;
-        for (Double enumration : enumrations) {
-            if (value.compareTo(enumration) == 0) {
-                haveEnumration = true;
-                break;
-            }
-            haveEnumration = false;
+        isFalse(notIn, "Value can not in " + notInValues + " .");
+        boolean hasValue = false;
+        for (Double it : hasValues) {
+            if (!value.equals(it))
+                continue;
+            hasValue = true;
+            break;
         }
-        isTrue(haveEnumration, "Value must be in one of the enumration.");
+        isTrue(hasValue, "Value must be in" + hasValues + " .");
     }
 
 }

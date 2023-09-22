@@ -16,33 +16,28 @@ public final class StringValidate extends SequenceValidator<String> {
 
     @Override
     protected void validate0() {
-        if (minLength != null) {
+        if (minLength != null)
             isTrue(value.length() >= minLength, "Value can not be less than minLength.");
-        }
-        if (maxLength != null) {
+        if (maxLength != null)
             isTrue(value.length() <= maxLength, "Value can not be greater than maxLength.");
-        }
-        if (notEmpty) {
+        if (notEmpty)
             isTrue(!value.isEmpty(), "Value can not be empty.");
-        }
-        if (notBlank) {
+        if (notBlank)
             isTrue(!value.isBlank(), "Value can not be blank.");
-        }
         if (regex != null) {
             boolean expression = Pattern.compile(regex)
                     .matcher(value)
                     .matches();
             isTrue(expression, "Value does not match regex.");
         }
-        boolean haveEnumration = true;
-        for (String enumration : enumrations) {
-            if (value.equals(enumration)) {
-                haveEnumration = true;
-                break;
-            }
-            haveEnumration = false;
+        boolean hasValue = false;
+        for (String it : hasValues) {
+            if (!value.equals(it))
+                continue;
+            hasValue = true;
+            break;
         }
-        isTrue(haveEnumration, "Value must be in one of the enumration.");
+        isTrue(hasValue, "Value must be in" + hasValues + " .");
     }
 
 }

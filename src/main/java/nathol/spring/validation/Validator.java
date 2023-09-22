@@ -5,13 +5,9 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import nathol.spring.validation.err.InvalidException;
-
 /**
- * 所有验证器的父类 <br/>
- * 可直接实例化,但我推荐使用位于 nathol.spring.validation 包下的 {@link Validate} <br/>
- * 此验证器为链式调用 <br/>
- * 此验证器的实现思路均使用 Lazy load (惰性加载,又称懒加载), 因此不用考虑链式调用的顺序性
+ * 此验证器的实现思路均使用 Lazy load (惰性加载,又称懒加载) <br/>
+ * 不用考虑链式调用的顺序性
  */
 public class Validator<T> {
 
@@ -19,14 +15,12 @@ public class Validator<T> {
 
     protected final Collection<Predicate<? super T>> wrappers = new ArrayList<>();
 
-    protected boolean nullable = false;
-
-    @Deprecated
-    protected InvalidException exception = new InvalidException("Invalid Param.");
+    protected boolean require = false;
 
     /**
      * 传入的参数,任意一个,你可以通过继承此类 <br/>
      * 自己实现一套验证集
+     *
      * @param value 值
      */
     public Validator(T value) {
@@ -35,7 +29,8 @@ public class Validator<T> {
 
     /**
      * 传入的参数允许带有默认值
-     * @param value 值
+     *
+     * @param value        值
      * @param defaultValue 默认值
      */
     public Validator(T value, T defaultValue) {
@@ -43,7 +38,8 @@ public class Validator<T> {
     }
 
     /**
-     * 条件验证,通过读到 value 进行判断返回 boolean
+     * 自定义条件验证
+     *
      * @param wrapper 条件
      */
     public Validator<T> wrapper(Predicate<? super T> wrapper) {
@@ -52,136 +48,84 @@ public class Validator<T> {
     }
 
     /**
-     * 设置此 value 可以为 null 值
+     * 设置 value 可以为 null
      */
-    public Validator<T> nullable() {
-        nullable = true;
+    public Validator<T> required() {
+        require = true;
         return this;
     }
 
     /**
-     * 设置如果出错的则会抛出的异常对象
-     * @param exception 参阅 {@link InvalidException}
-     */
-    public Validator<T> except(InvalidException exception) {
-        this.exception = exception;
-        return this;
-    }
-
-    /**
-     * 开始校验, 请不要继承此类
+     * 校验实现
      */
     public final void validate() {
         if (this.value == null) {
-            isTrue(nullable, "Value can not be null.");
+            isFalse(require, "Value can not be null.");
             return;
         }
-        validate0();
         this.wrappers.forEach(it -> isTrue(it.test(value), "Wrappers failed."));
+        validate0();
     }
 
     /**
-     * 占位, 为继承此类需实现的方法 <br/>
-     * 此类秉持着约定大于配置
+     * 继承此类需实现的方法
      */
     protected void validate0() {
     }
 
-    /**
-     * 在校验的时候顺带返回值, 常用的方法
-     * @return this.value
-     */
     public T extract() {
         validate();
         return this.value;
     }
 
-    /**
-     * 在校验的时候顺带返回值, 并且由 java.util 包中的 {@link Optional} 打包获取
-     * @return {@link Optional} 类型
-     */
     public Optional<T> optional() {
         validate();
         return Optional.ofNullable(this.value);
     }
 
-    /**
-     * 快捷实例化方法
-     * @param <T> 记录传入的参数类型
-     * @param value 值
-     */
+    /* --------------- 静态构造 --------------- */
+
     public static <T> Validator<T> of(T value) {
         return new Validator<>(value);
     }
 
-    /**
-     * 快捷实例化方法
-     * @param <T> 记录传入的参数类型
-     * @param value 值
-     * @param defaultValue 默认值
-     */
     public static <T> Validator<T> of(T value, T defaultValue) {
         return new Validator<>(value, defaultValue);
     }
 
-    /**
-     * 校验传入的布尔值是否为 True, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     */
+    /* --------------- 工具集 --------------- */
+
     public static void isTrue(boolean expression) {
         isTrue(expression, "Invalid Param");
     }
 
-    /**
-     * 校验传入的布尔值是否为 True, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     * @param message 异常信息
-     */
     public static void isTrue(boolean expression, String message) {
         if (expression) {
             return;
         }
-        throw new InvalidException(message);
+        throw new IllegalArgumentException(message);
     }
 
-    /**
-     * 校验传入的布尔值是否为 False, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     */
     public static void isFalse(boolean expression) {
         isFalse(expression, "Invalid Param");
     }
 
-    /**
-     * 校验传入的布尔值是否为 False, 如果不是, 则抛出 {@link InvalidException}
-     * @param expression 布尔值
-     * @param message 异常信息
-     */
     public static void isFalse(boolean expression, String message) {
         if (!expression) {
             return;
         }
-        throw new InvalidException(message);
+        throw new IllegalArgumentException(message);
     }
 
-    /**
-     * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
-     * @param object 参数
-     */
     public static void notNull(Object object) {
         notNull(object, "Invalid Param");
     }
 
-    /**
-     * 校验传入的对象是否为 null, 如果是, 则抛出 {@link InvalidException}
-     * @param object 参数
-     * @param message 异常信息
-     */
     public static void notNull(Object object, String message) {
         if (object != null) {
             return;
         }
-        throw new InvalidException(message);
+        throw new IllegalArgumentException(message);
     }
 
 }

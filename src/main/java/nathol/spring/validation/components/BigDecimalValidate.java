@@ -24,18 +24,22 @@ public class BigDecimalValidate extends NumberValidator<BigDecimal> {
             int result = value.compareTo(max);
             isTrue(result == -1 || result == 0, "Value can not be greater than max.");
         }
-        for (BigDecimal forbid : forbids) {
-            isFalse(value.compareTo(forbid) == 0, "Value can not be equal to forbid.");
+        boolean notIn = false;
+        for (BigDecimal it : notInValues) {
+            if (!value.equals(it))
+                continue;
+            notIn = true;
+            break;
         }
-        boolean haveEnumration = true;
-        for (BigDecimal enumration : enumrations) {
-            if (value.compareTo(enumration) == 0) {
-                haveEnumration = true;
-                break;
-            }
-            haveEnumration = false;
+        isFalse(notIn, "Value can not in " + notInValues + " .");
+        boolean hasValue = false;
+        for (BigDecimal it : hasValues) {
+            if (!value.equals(it))
+                continue;
+            hasValue = true;
+            break;
         }
-        isTrue(haveEnumration, "Value must be in one of the enumration.");
+        isTrue(hasValue, "Value must be in" + hasValues + " .");
     }
 
 }

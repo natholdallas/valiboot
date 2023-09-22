@@ -16,24 +16,26 @@ public final class IntegerValidate extends NumberValidator<Integer> {
 
     @Override
     protected void validate0() {
-        if (min != null) {
+        if (min != null)
             isTrue(value >= min, "Value can not be less than min.");
-        }
-        if (max != null) {
+        if (max != null)
             isTrue(value <= max, "Value can not be greater than max.");
+        boolean notIn = false;
+        for (Integer it : notInValues) {
+            if (value != it)
+                continue;
+            notIn = true;
+            break;
         }
-        for (Integer forbid : forbids) {
-            isFalse(value == forbid, "Value can not be equal to forbid.");
+        isFalse(notIn, "Value can not in " + notInValues + " .");
+        boolean hasValue = false;
+        for (Integer it : hasValues) {
+            if (value != it)
+                continue;
+            hasValue = true;
+            break;
         }
-        boolean haveEnumration = true;
-        for (Integer enumration : enumrations) {
-            if (value == enumration) {
-                haveEnumration = true;
-                break;
-            }
-            haveEnumration = false;
-        }
-        isTrue(haveEnumration, "Value must be in one of the enumration.");
+        isTrue(hasValue, "Value must be in" + hasValues + " .");
     }
 
 }
