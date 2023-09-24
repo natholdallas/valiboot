@@ -13,10 +13,10 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
 
     protected Integer minLength;
     protected Integer maxLength;
-    protected boolean notBlank = false;
-    protected boolean notEmpty = false;
+    protected boolean notBlank;
+    protected boolean notEmpty;
     protected String regex;
-    protected final Collection<T> hasValues = new ArrayList<>();
+    protected Collection<T> hasValues;
 
     public SequenceValidator(T value) {
         super(value);
@@ -27,7 +27,7 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
     }
 
     /**
-     * 设置 value.length() 的最小值
+     * 设置 value.length() 最小值
      * @param minLength 值
      */
     public SequenceValidator<T> minLength(int minLength) {
@@ -36,7 +36,7 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
     }
 
     /**
-     * 设置 value.length() 的最大值
+     * 设置 value.length() 最大值
      */
     public SequenceValidator<T> maxLength(int maxLength) {
         this.maxLength = maxLength;
@@ -44,7 +44,7 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
     }
 
     /**
-     * 设置 value.length() 的最大值和最小值
+     * 设置 value.length() 最大值和最小值
      * @param minLength 最小值
      * @param maxLength 最大值
      */
@@ -83,16 +83,19 @@ public abstract class SequenceValidator<T extends CharSequence> extends Validato
      */
     @SafeVarargs
     public final SequenceValidator<T> hasValue(T... values) {
+        if (this.hasValues == null) {
+            this.hasValues = new ArrayList<>(values.length);
+        }
         for (T value : values) {
             this.hasValues.add(value);
         }
         return this;
     }
 
-    /**
-     * 设置 value 是否包含在 hasValues 中
-     */
     public SequenceValidator<T> hasValue(Collection<T> values) {
+        if (this.hasValues == null) {
+            this.hasValues = new ArrayList<>(values.size());
+        }
         this.hasValues.addAll(values);
         return this;
     }

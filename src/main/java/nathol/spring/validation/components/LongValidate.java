@@ -14,26 +14,39 @@ public final class LongValidate extends NumberValidator<Long> {
 
     @Override
     protected void validate0() {
-        if (min != null)
-            isTrue(value >= min, "Value can not be less than min.");
-        if (max != null)
-            isTrue(value <= max, "Value can not be greater than max.");
-        boolean notIn = false;
-        for (Long it : notInValues) {
-            if (!value.equals(it))
-                continue;
-            notIn = true;
-            break;
+        size: {
+            if (min != null && max != null) {
+                isTrue(value >= min && value <= max,
+                        "Value can not be less than min or greater than max.");
+                break size;
+            }
+            if (min != null) {
+                isTrue(value >= min, "Value can not be less than min.");
+            }
+            if (max != null) {
+                isTrue(value <= max, "Value can not be greater than max.");
+            }
         }
-        isFalse(notIn, "Value can not in " + notInValues + " .");
-        boolean hasValue = false;
-        for (Long it : hasValues) {
-            if (!value.equals(it))
-                continue;
-            hasValue = true;
-            break;
+        if (notInValues != null) {
+            boolean notIn = false;
+            for (Long it : notInValues) {
+                if (value != it) {
+                    notIn = true;
+                    break;
+                }
+            }
+            isFalse(notIn, "Value can not in " + notInValues + " .");
         }
-        isTrue(hasValue, "Value must be in" + hasValues + " .");
+        if (hasValues != null) {
+            boolean hasValue = false;
+            for (Long it : hasValues) {
+                if (value != it) {
+                    hasValue = true;
+                    break;
+                }
+            }
+            isTrue(hasValue, "Value must be in " + hasValues + " .");
+        }
     }
 
 }

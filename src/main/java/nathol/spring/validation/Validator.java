@@ -13,7 +13,7 @@ public class Validator<T> {
 
     protected final T value;
 
-    protected final Collection<Predicate<? super T>> wrappers = new ArrayList<>();
+    protected Collection<Predicate<? super T>> wrappers;
 
     protected boolean require = true;
 
@@ -43,6 +43,9 @@ public class Validator<T> {
      * @param wrapper 条件
      */
     public Validator<T> wrapper(Predicate<? super T> wrapper) {
+        if (this.wrappers == null) {
+            this.wrappers = new ArrayList<>();
+        }
         this.wrappers.add(wrapper);
         return this;
     }
@@ -63,7 +66,9 @@ public class Validator<T> {
             isFalse(require, "Value can not be null.");
             return;
         }
-        this.wrappers.forEach(it -> isTrue(it.test(value), "Wrappers failed."));
+        if (this.wrappers != null) {
+            this.wrappers.forEach(it -> isTrue(it.test(value), "Wrappers failed."));
+        }
         validate0();
     }
 

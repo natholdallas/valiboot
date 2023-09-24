@@ -15,8 +15,8 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
 
     protected T min;
     protected T max;
-    protected final Collection<T> notInValues = new ArrayList<>();
-    protected final Collection<T> hasValues = new ArrayList<>();
+    protected Collection<T> notInValues;
+    protected Collection<T> hasValues;
 
     public NumberValidator(T value) {
         super(value);
@@ -27,7 +27,7 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
     }
 
     /**
-     * 设置 value 的最小值
+     * 设置 value 最小值
      */
     public NumberValidator<T> min(T min) {
         this.min = min;
@@ -35,7 +35,7 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
     }
 
     /**
-     * 设置 value 的最大值
+     * 设置 value 最大值
      */
     public NumberValidator<T> max(T max) {
         this.max = max;
@@ -43,7 +43,7 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
     }
 
     /**
-     * 设置 value 的最大值和最小值
+     * 设置 value 最大值和最小值
      *
      * @param min 最小值
      * @param max 最大值
@@ -59,12 +59,19 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
      */
     @SafeVarargs
     public final NumberValidator<T> notIn(T... values) {
-        for (T value : values)
+        if (this.notInValues == null) {
+            this.notInValues = new ArrayList<>(values.length);
+        }
+        for (T value : values) {
             this.notInValues.add(value);
+        }
         return this;
     }
 
     public NumberValidator<T> notIn(Collection<T> values) {
+        if (this.notInValues == null) {
+            this.notInValues = new ArrayList<>(values.size());
+        }
         this.notInValues.addAll(values);
         return this;
     }
@@ -74,12 +81,19 @@ public abstract class NumberValidator<T extends Number> extends Validator<T> {
      */
     @SafeVarargs
     public final NumberValidator<T> hasValue(T... values) {
-        for (T value : values)
+        if (this.hasValues == null) {
+            this.hasValues = new ArrayList<>(values.length);
+        }
+        for (T value : values) {
             this.hasValues.add(value);
+        }
         return this;
     }
 
     public NumberValidator<T> hasValue(Collection<T> values) {
+        if (this.hasValues == null) {
+            this.hasValues = new ArrayList<>(values.size());
+        }
         this.hasValues.addAll(values);
         return this;
     }
