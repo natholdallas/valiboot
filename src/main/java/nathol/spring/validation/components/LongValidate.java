@@ -30,7 +30,7 @@ public final class LongValidate extends NumberValidator<Long> {
         if (notInValues != null) {
             boolean notIn = false;
             for (Long it : notInValues) {
-                if (value != it) {
+                if (value == it) {
                     notIn = true;
                     break;
                 }
@@ -40,7 +40,7 @@ public final class LongValidate extends NumberValidator<Long> {
         if (hasValues != null) {
             boolean hasValue = false;
             for (Long it : hasValues) {
-                if (value != it) {
+                if (value == it) {
                     hasValue = true;
                     break;
                 }
