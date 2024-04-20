@@ -1,217 +1,93 @@
 # ValiBoot
 
-## 前言
-
-> 此框架极为简单, 为了去除 Service 层而生  
-> 受到 django.py 的启发  
-> 此文档具有非常强的上下文关联,请详细配合上下文查看文档
-
 ## 介绍
 
-本框架为轻量化的校验框架, 多数为了校验前端传入过来的参数, 并且弱化 `Service` 的作用, 以解决冗余类过多  
-并且此框架比较与 SpringBoot / Spring MVC 贴合, 后续还会增加 **Mybatis** 的支持
+> 此框架为轻量化校验框架, 为去除 Service 层而生  
+> 受到 django.py 的启发
 
 ## 安装
+
+由于是通过 `jitpack` 打包的而不是直接在 `maven` 仓库中, 因此需要配置 `jitpack` 的远程仓库
 
 ```xml
 <repositories>
     <repository>
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
-    <repository>
+    </repository>
 </repositories>
+```
 
+```xml
 <dependency>
     <groupId>com.github.NatholDallas</groupId>
-    <artifactId>ValiBoot</artifactId>
-    <version>2.0.0</version>
+    <artifactId>valiboot</artifactId>
+    <version>4.0.0</version>
+    <!-- version 标签的版本号永远代表着最新版本号, 详细应查看以往的版本发布号 -->
 </dependency>
-
-<!-- 这个 version 标签中的版本号永远代表着最新版本号, 详细你应该查看以往的版本发布号 -->
 ```
 
-## ValiBoot - DTO/Controller
-
-简单阐述一下问题:  
-传统的写法需要 `DTO`/`Controller`/`Service` 三层传递, 非常麻烦, 让 DTO 只作为一个 record, 不方便编写数据检查  
-因此校验的活交给了 `Controller` 层, 然后校验完之后交给 `Service` 返回值, 非常繁琐  
-并且按 SSM 框架中, 校验有时不止时数据上的格式, 还要有鉴权性, 比如通过 Mybatis, 使用 `Mapper` 从数据库中  
-查询数据, 以此来完成校验, 示例:
+## 使用指南 🧭
 
 ```java
-// Controller
-@RestController
-@RequestMapping("/user")
-public class UserController {
-
-    private final UserMapper userMapper;
-    private final UserService userService;
-
-    // Spring IOC Container 中现阶段不推荐使用 @Autowired, 而是推荐构造方法注入
-    public UserController(UserMapper userMapper, UserService userService) {
-        this.userMapper = userMapper;
-        this.userSerivce = userService;
-    }
-
-    @PutMapping
-    public String put(@RequestBody UserPutRequest request) {
-        if (this.userMapper.selectById(request.getId())) {
-            return "error, user not found";
-        }
-        // request.getUsername() 校验字符长度....
-        // request.getPassword() 校验字符合法....
-        return this.userService.putService(request);
-    }
-
-}
-
-// DTO (映射到 UserController 中的 put 方法)
-public class UserPutRequest {
-
-    private final Integer id;
-    private final String username;
-    private final String password;
-
-    public UserPutRequest(Integer id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    // getter...
-
-}
-
-// Service 层
-@Service
-public class UserService {
-
-    private final UserMapper userMapper;
-
-    public UserService(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
-    public String updateUser(UserPutRequest request) {
-        // UserMapper update...
-        return "successful";
-    }
-
+public static void main(String[] args) {
+    List<InvalidMsg> msgs = new StringValidator()
+            .required(true)
+            .minLength(10)
+            .maxLength(20)
+            .notEmpty()
+            .notBlank()
+            .regex("12")
+            .enumration("123445678909876543")
+            .validate("112803612893891547812523445678909876543");
+    System.out.println(msgs);
+    // output
+    /* [
+        InvalidMsg[title=MaxLength, message=value 不能大于 20],
+        InvalidMsg[title=Regex, message=value 与正则表达式不匹配 12],
+        InvalidMsg[title=Enumration, message=value 必须在 [123445678909876543] 中]
+       ]
+    */
 }
 ```
 
-可以看到, 如果要符合规范的编写, 非常繁琐  
-因此我们可以何不尝换一种方式: 在 `DTO` 中的构造方法顺带直接校验...  
-于是, 敲了一个 ValiBoot...
+不止是 `validate()` 方法, 内置有多种不同的产生结果, 详情可查看 `github.natholdallas.valiboot.Validator`
 
-## ValiBoot 使用说明
-
-因此, 你可以直接使用此 ValiBoot 中的校验, 直接在 `DTO` 中校验参数:
+你可以使用 Record 类来简化校验过程, 面向异常处理, 面向数据处理, 面向
 
 ```java
-@SpringBootApplication
-public class Application {
-
-    public static ConfigurableApplicationContext context;
-
-    public static void main(String[] args) {
-        context = SpringApplication.run(Application.class);
+public record Test(String content) {
+    public Test {
+        List<InvalidMsg> msgs = new StringValidator()
+            .required(true)
+            .minLength(10)
+            .maxLength(20)
+            .notEmpty()
+            .notBlank()
+            .regex("12")
+            .enumration("123445678909876543")
+            .validate(content);
+        System.out.println(msgs);
     }
-
-}
-
-// Controller
-@RestController
-@RequestMapping("/user")
-public class UserController {
-
-    private final UserMapper userMapper;
-
-    public UserController(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
-    @PutMapping
-    public String put(@RequestBody UserPutRequest request) {
-        // UserMapper update...
-        return "successful";
-    }
-
-}
-
-// UserMapper 注: 使用了 Mybatis, 因此无需写实现
-@Mapper
-public interface UserMapper {
-
-    boolean isExists(Long id); // 用于查询这个 id 是否存在与用户表, 以此检查数据库中是否存在此用户
-
-}
-
-// DTO
-public class UserPutRequest {
-
-    private final Long id;
-    private final String username;
-    private final String password;
-
-    public UserPutRequest(Integer id, String username, String password) {
-        // 通过 SpringApplication 返回的 context (详情见 ConfigurableApplicationContext 对象)
-        // 拿到 UserMapper 的实例
-        this.id = NumberValidator.of(id)
-                .wrapper(value -> {
-                    UserMapper userMapper = Application.context.getBean("userMapper", UserMapper.class);
-                    return userMapper.isExists(value);
-                });
-        this.username = SequenceValidator.of(username)
-                .range(6, 12)
-                .regex("正则超人!(我不会🤣)")
-                .notEmpty()
-                .notBlank();
-        this.password = SequenceValidator.of(password)
-                .regex("正则表达式...(我不会🤣)")
-                .notEmpty()
-                .notBlank();
-    }
-
-    // getter...
-
 }
 ```
 
-## 核心内容
+## 已知问题
 
-所有的使用层位于 `nathol.spring.validation` 包下
+### 当校验的参数为 `null` 时
 
-- BooleanValidator: 用于校验布尔值
-- CollectionValidator: 用于校验集合
-- NumberValidator: 用于校验数值
-- SequenceValidator: 用于校验字符
-- Validator: 以上的父类,比较少用
+`required` 如果设置为 `true` 且 `value` 为 `null` 的情况下, 不会执行接下来的条件, `InvalidMsg` 产生的错误信息只会有一条
 
-## 实现具体
+- 好处: 减少了性能开销
+- 坏处: 无法实现需要全部错误信息的需求
 
-所有的具体实现位于 `nathol.spring.validation.components` 包下
+### 国际化
 
-### CollectionValidator 的实现
+目前框架仅支持中文, 连最基本的英文也不支持, 并且信息是内联代码的, 没有抽离出来, 后续会解决
 
-1. CollectionValidate
-
-### NumberValidator 的实现
-
-1. DoubleValidate
-2. FloatValidate
-3. IntegerValidate
-4. LongValidate'
-
-### SequenceValidator 的实现
-
-1. StringValidate
-
-## 技术栈
-
-本校验框架都为链式调用, 采用 `Lazy Load` (惰性加载) 模式  
-因此可以乱序调用
+- 好处: 耦合减少性能开销
+- 坏处: 不支持其他语种, 也不能自定义错误信息
 
 ## 后续内容
 
-此框架不止可以应用在 SpringBoot 中, 因此我不会添加 Spring 的包在项目中, 它完全独立  
+此框架不止可以应用在 SpringBoot 中, 因此我不会添加 Spring 的包在项目中, 它完全独立
