@@ -1,4 +1,4 @@
-package github.natholdallas.valiboot.core;
+package com.github.natholdallas.core;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

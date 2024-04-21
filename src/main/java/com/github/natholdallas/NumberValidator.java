@@ -1,6 +1,6 @@
-package github.natholdallas.valiboot;
+package com.github.natholdallas;
 
-import github.natholdallas.valiboot.core.InvalidMsg;
+import com.github.natholdallas.core.InvalidMsg;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;

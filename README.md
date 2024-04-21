@@ -51,7 +51,7 @@ public static void main(String[] args) {
 }
 ```
 
-不止是 `validate()` 方法, 内置有多种不同的产生结果, 详情可查看 `github.natholdallas.valiboot.Validator`
+不止是 `validate()` 方法, 内置有多种不同的产生结果, 详情可查看 `com.github.natholdallas.Validator`
 
 你可以使用 Record 类来简化校验过程, 面向异常处理, 面向数据处理, 面向
 

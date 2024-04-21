@@ -1,8 +1,8 @@
-package github.natholdallas.valiboot;
+package com.github.natholdallas;
 
-import github.natholdallas.valiboot.core.InvalidException;
-import github.natholdallas.valiboot.core.InvalidMsg;
-import github.natholdallas.valiboot.core.ValidResult;
+import com.github.natholdallas.core.InvalidException;
+import com.github.natholdallas.core.InvalidMsg;
+import com.github.natholdallas.core.ValidResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
