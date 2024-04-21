@@ -22,8 +22,7 @@
 <dependency>
     <groupId>com.github.NatholDallas</groupId>
     <artifactId>valiboot</artifactId>
-    <version>4.0.0</version>
-    <!-- version 标签的版本号永远代表着最新版本号, 详细应查看以往的版本发布号 -->
+    <version>xxxxxxxxxx</version>
 </dependency>
 ```
 
